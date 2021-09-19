@@ -5,7 +5,7 @@ const contactsPath = require("../path/contactsPath");
 const removeById = async(id) => {
   try {
     const contacts = await getAll();
-    const idx = contacts.findIndex((item) => item.id === id);
+    const idx = contacts.findIndex((item) => item.id.toString() === id);
     if (idx === -1) {
       return null;
     }

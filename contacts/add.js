@@ -4,10 +4,10 @@ const fs = require("fs/promises");
 const contactsPath = require("../path/contactsPath");
 const getAll = require("./getAll");
 
-const add = async (data) => {
+const add = async (name, email, phone) => {
   try {
     const contacts = await getAll();
-    const newContact = { ...data, id: v4() };
+    const newContact = { name, email, phone, id: v4() };
     contacts.push(newContact);
     console.log("++", contactsPath);
     await fs.writeFile(contactsPath, JSON.stringify(contacts));
@@ -16,7 +16,6 @@ const add = async (data) => {
   } catch (error) {
     console.log(error);
   }
-
 };
 
 module.exports = add;

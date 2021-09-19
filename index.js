@@ -31,20 +31,34 @@
 
 const contactsOperations = require('./contacts');
 
-const workWithcontacts = async (type = "getAll", id, data) => {
+const { Command } = require("commander");
+
+const program = new Command();
+program
+  .option("-a, --action <type>", "choose action")
+  .option("-i, --id <type>", "user id")
+  .option("-n, --name <type>", "user name")
+  .option("-e, --email <type>", "user email")
+  .option("-p, --phone <type>", "user phone");
+
+program.parse(process.argv);
+
+const argv = program.opts();
+
+const workWithcontacts = async ({ action, id, name, email, phone }) => {
   try {
-    switch (type) {
-      case "getAll":
-        return await contactsOperations.getAll();
-      case "getById":
+    switch (action) {
+      case "list":
+        return await contactsOperations.listContacts();
+      case "get":
         return await contactsOperations.getById(id);
       case "add":
-        return await contactsOperations.add(data);
-      case "removeById":
+        return await contactsOperations.add(name, email, phone);
+      case "remove":
         return await contactsOperations.removeById(id);
     }
   } catch (error) {
-    throw new error;
+    throw new error();
   }
 };
 
@@ -52,7 +66,7 @@ const workWithcontacts = async (type = "getAll", id, data) => {
 //   .then((data) => console.log(data))
 //   .catch((error) => console.log(error));
 
-const id = 10
+// const id = 10
 
 // workWithcontacts("getById", id)
 //   .then((data) => console.log(data))
@@ -68,6 +82,8 @@ const id = 10
   //   .then(data => console.log(data))
   //   .catch(error => console.log(error));
 
-    workWithcontacts("removeById", id)
-    .then(data => console.log(data))
-    .catch(error => console.log(error));
+    // workWithcontacts("removeById", id)
+    // .then(data => console.log(data))
+    // .catch(error => console.log(error));
+
+    workWithcontacts(argv);
